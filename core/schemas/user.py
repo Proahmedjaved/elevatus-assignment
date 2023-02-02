@@ -19,6 +19,7 @@ class UserSchema(BaseModel):
     first_name: str = Field(..., example="John")
     last_name: str = Field(..., example="Doe")
     email: LowerCaseEmailStr = Field(..., example="john@email.com")
+    password: str = Field(..., example="password")
 
 
 class UserReadSchema(UserSchema):
@@ -31,3 +32,4 @@ class UserReadSchema(UserSchema):
         :param email: User email
     """
     uuid: UUID
+    password: str = None
