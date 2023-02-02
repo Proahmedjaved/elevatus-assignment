@@ -5,14 +5,16 @@
 
 from uuid import uuid4, UUID
 import bson
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Security
 from fastapi.responses import JSONResponse
+from passlib.hash import pbkdf2_sha256
 from core.schemas import UserSchema, UserReadSchema
 from core.database import users
+from core.security import get_current_active_user
 
 router = APIRouter()
 
-@router.post("/")
+@router.post("/", response_model_exclude_defaults=True)
 async def create_user(user: UserSchema) -> UserReadSchema:
     """
     Create a new user.
@@ -30,19 +32,30 @@ async def create_user(user: UserSchema) -> UserReadSchema:
             content={"message": "User already exists"}
             )
 
+    user.password = pbkdf2_sha256.hash(user.password)
+
     uuid = bson.Binary.from_uuid(uuid4())
     document = {"uuid": uuid, **user.dict()}
     users.insert_one(document)
+
+    del document["password"]
+
     return document
 
 
 @router.get("/{uuid}")
-async def get_user(uuid: UUID) -> UserReadSchema:
+async def get_user(uuid: UUID, current_user = Security(get_current_active_user)) -> UserReadSchema:
     """
     Get a user by uuid.
 
     - **uuid**: User uuid (required)
     """
+    if current_user["uuid"] != uuid:
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={"message": "You are not allowed to access this resource"}
+        )
+
     user = users.find_one({"uuid": bson.Binary.from_uuid(uuid)}, {"_id": 0})
     if user is None:
         return JSONResponse(
