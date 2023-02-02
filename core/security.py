@@ -47,6 +47,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         {"_id": 0, "password": 0}
     )
 
+    user["uuid"] = UUID(bytes=user["uuid"])
+
     return {**user,  "disabled": False}
 
 
