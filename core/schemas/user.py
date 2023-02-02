@@ -2,7 +2,7 @@
     User pydantic models
 """
 
-from uuid import UUID, uuid4
+from uuid import UUID
 from pydantic import BaseModel, EmailStr, Field
 
 
