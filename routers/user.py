@@ -1,7 +1,12 @@
+"""
+    User router.
+
+"""
+
+from uuid import uuid4, UUID
 import bson
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
-from uuid import uuid4, UUID
 from core.schemas import UserSchema, UserReadSchema
 from core.database import users
 
@@ -17,6 +22,14 @@ async def create_user(user: UserSchema) -> UserReadSchema:
     - **email**: User email (required)
 
     """
+
+    # Check if user exists
+    if users.find_one({"email": user.email}):
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT, 
+            content={"message": "User already exists"}
+            )
+
     uuid = bson.Binary.from_uuid(uuid4())
     document = {"uuid": uuid, **user.dict()}
     users.insert_one(document)
@@ -32,6 +45,9 @@ async def get_user(uuid: UUID) -> UserReadSchema:
     """
     user = users.find_one({"uuid": bson.Binary.from_uuid(uuid)}, {"_id": 0})
     if user is None:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "User not found"})
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": "User not found"}
+        )
     return user
     
