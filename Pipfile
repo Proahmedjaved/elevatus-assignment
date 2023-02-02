@@ -9,6 +9,9 @@ pymongo = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 email-validator = "*"
 pandas = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = "*"
+python-multipart = "*"
 
 [dev-packages]
 
