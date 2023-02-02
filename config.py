@@ -19,16 +19,12 @@ class Settings(BaseSettings):
 
     # The name of the application
     APP_NAME: str = "Elevatus Assignment"
-
-    # The version of the application
     APP_VERSION: str = "0.1.0"
-
+    ENVIRONMENT: str
     MONGO_CONNECTION_STRING: str
     MONGO_DB_NAME: str
-
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALGORITHM: str = "HS256"
-
     ACCESS_TOKEN_EXPIRE_HOURS: int = 12
 
     class Config:
@@ -36,3 +32,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+if settings.ENVIRONMENT == "development":
+    settings.SECRET_KEY = "dev"
