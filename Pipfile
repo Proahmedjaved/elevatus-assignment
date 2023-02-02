@@ -8,6 +8,7 @@ fastapi = "*"
 pymongo = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 email-validator = "*"
+pandas = "*"
 
 [dev-packages]
 
