@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 fastapi = "*"
 pymongo = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+email-validator = "*"
 
 [dev-packages]
 
