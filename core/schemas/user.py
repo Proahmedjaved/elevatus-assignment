@@ -4,6 +4,7 @@
 
 from uuid import UUID
 from pydantic import BaseModel, EmailStr, Field
+from utilities import LowerCaseEmailStr
 
 
 class UserSchema(BaseModel):
@@ -17,7 +18,7 @@ class UserSchema(BaseModel):
     """
     first_name: str = Field(..., example="John")
     last_name: str = Field(..., example="Doe")
-    email: EmailStr = Field(..., example="john@email.com")
+    email: LowerCaseEmailStr = Field(..., example="john@email.com")
 
 
 class UserReadSchema(UserSchema):
