@@ -7,15 +7,18 @@ import io
 from uuid import uuid4, UUID
 import bson
 import pandas as pd
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Security
 from fastapi.responses import JSONResponse, StreamingResponse
 from core.schemas import CandidateSchema, CandidateReadSchema, CandidateUpdateSchema
 from core.database import candidates
+from core.security import get_current_active_user
 
 router = APIRouter()
 
 @router.post("/")
-async def create_candidate(candidate: CandidateSchema) -> CandidateReadSchema:
+async def create_candidate(
+    candidate: CandidateSchema, _ = Security(get_current_active_user)
+    ) -> CandidateReadSchema:
     """
         Create candidate
 
@@ -36,7 +39,7 @@ async def create_candidate(candidate: CandidateSchema) -> CandidateReadSchema:
     # Check if candidate exists
     if candidates.find_one({"email": candidate.email}):
         return JSONResponse(
-            status_code=status.HTTP_409_CONFLICT, 
+            status_code=status.HTTP_409_CONFLICT,
             content={"message": "Candidate already exists"}
             )
 
@@ -47,7 +50,7 @@ async def create_candidate(candidate: CandidateSchema) -> CandidateReadSchema:
 
 
 @router.get("/generate-report/", status_code=status.HTTP_200_OK)
-async def generate_candidate_csv() -> StreamingResponse:
+async def generate_candidate_csv(_ = Security(get_current_active_user)) -> StreamingResponse:
     """
         Generate csv file of all candidates!
     """
@@ -68,7 +71,7 @@ async def generate_candidate_csv() -> StreamingResponse:
 
 
 @router.get("/{uuid}")
-async def get_candidate(uuid: UUID) -> CandidateReadSchema:
+async def get_candidate(uuid: UUID, _ = Security(get_current_active_user)) -> CandidateReadSchema:
     """
         Get candidate
 
@@ -78,13 +81,16 @@ async def get_candidate(uuid: UUID) -> CandidateReadSchema:
     if document:
         return document
     return JSONResponse(
-        status_code=status.HTTP_404_NOT_FOUND, 
+        status_code=status.HTTP_404_NOT_FOUND,
         content={"message": "Candidate not found"}
     )
 
 @router.put("/{uuid}")
 @router.patch("/{uuid}")
-async def update_candidate(uuid: UUID, candidate: CandidateUpdateSchema) -> CandidateReadSchema:
+async def update_candidate(
+    uuid: UUID,
+    candidate: CandidateUpdateSchema,
+    _ = Security(get_current_active_user)) -> CandidateReadSchema:
     """
         Update candidate
 
@@ -114,7 +120,7 @@ async def update_candidate(uuid: UUID, candidate: CandidateUpdateSchema) -> Cand
 
 
 @router.delete("/{uuid}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_candidate(uuid: UUID):
+async def delete_candidate(uuid: UUID, _ = Security(get_current_active_user)):
     """
         Delete candidate
 
@@ -123,13 +129,13 @@ async def delete_candidate(uuid: UUID):
     document = candidates.find_one_and_delete(filter={"uuid": bson.Binary.from_uuid(uuid)})
     if not document:
         return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND, 
+            status_code=status.HTTP_404_NOT_FOUND,
             content={"message": "Candidate not found"}
         )
 
 
-@router.get("/")
-async def get_candidates() -> list[CandidateReadSchema]:
+@router.get("/",)
+async def get_candidates(_ = Security(get_current_active_user)) -> list[CandidateReadSchema]:
     """
         Get candidates
     """
