@@ -43,7 +43,7 @@ async def create_user(user: UserSchema) -> UserReadSchema:
     return document
 
 
-@router.get("/{uuid}")
+@router.get("/{uuid}", response_model_exclude_defaults=True)
 async def get_user(uuid: UUID, current_user = Security(get_current_active_user)) -> UserReadSchema:
     """
     Get a user by uuid.
@@ -56,11 +56,12 @@ async def get_user(uuid: UUID, current_user = Security(get_current_active_user))
             content={"message": "You are not allowed to access this resource"}
         )
 
-    user = users.find_one({"uuid": bson.Binary.from_uuid(uuid)}, {"_id": 0})
+    user = users.find_one({"uuid": bson.Binary.from_uuid(uuid)}, {"_id": 0, "password": 0})
     if user is None:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"message": "User not found"}
         )
+
     return user
     
