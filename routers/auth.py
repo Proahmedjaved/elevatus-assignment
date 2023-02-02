@@ -21,7 +21,6 @@ async def log_in(request: OAuth2PasswordRequestForm = Depends()):
         Provide **Username** and **Password** to log in.
 
     """
-    print(request.username, request.password)
     user = users.find_one({"email": request.username.lower()})
 
     if not user:
