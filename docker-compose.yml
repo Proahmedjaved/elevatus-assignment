@@ -1,0 +1,17 @@
+version: '1.0'
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - "8002:8000"
+    depends_on:
+      - db
+    environment:
+      - ENVIRONMENT=development
+      - MONGO_CONNECTION_STRING=mongodb://db:27017/
+      - MONGO_DB_NAME=elevatus
+  db:
+    image: mongo
+
+      
