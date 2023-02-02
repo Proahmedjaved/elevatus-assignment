@@ -1,5 +1,5 @@
 """
-
+    User pydantic models
 """
 
 from uuid import UUID, uuid4
