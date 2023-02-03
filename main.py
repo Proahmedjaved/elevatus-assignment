@@ -11,12 +11,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from routers.routers import api_router
 
+from middlewares import exception_handling_middleware
+
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="This is elevatus assignment",
 )
+
+app.middleware(middleware_type="http")(exception_handling_middleware)
 
 origins = [
     "http://localhost",
@@ -30,7 +34,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/", include_in_schema=False)
 async def root():
