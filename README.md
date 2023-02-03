@@ -9,7 +9,7 @@ This is a simple example of how to use FastAPI with MongoDB.
 <!-- copy example env file -->
 
 ```bash
-cp .env.example .env
+cp example.env .env
 ```
 
 <!-- install pipenv -->
