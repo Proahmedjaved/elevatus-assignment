@@ -12,6 +12,9 @@ pandas = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 passlib = "*"
 python-multipart = "*"
+pytest = "*"
+httpx = "*"
+coverage = "*"
 
 [dev-packages]
 
