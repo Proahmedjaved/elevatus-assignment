@@ -13,11 +13,6 @@ def exception_handling_middleware(request: Request, call_next):
     try:
         response = call_next(request)
         return response
-    except HTTPException as http_exception:
-        return JSONResponse(
-            status_code=http_exception.status_code,
-            content={"message": http_exception.detail},
-        )
     except Exception as exception:
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

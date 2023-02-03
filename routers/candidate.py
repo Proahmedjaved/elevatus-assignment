@@ -110,9 +110,10 @@ async def update_candidate(
 
     document = candidates.find_one({"uuid": bson.Binary.from_uuid(uuid)})
     if document:
-        document = candidate.dict()
+        document = candidate.dict(exclude_unset=True)
         candidates.update_one({"uuid": bson.Binary.from_uuid(uuid)}, {"$set": document})
-        return {"uuid": uuid, **document}
+        updated_candidate = candidates.find_one({"uuid": bson.Binary.from_uuid(uuid)})
+        return {"uuid": uuid, **updated_candidate}
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
         content={"message": "Candidate not found"}

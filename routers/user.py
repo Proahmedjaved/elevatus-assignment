@@ -57,11 +57,23 @@ async def get_user(uuid: UUID, current_user = Security(get_current_active_user))
         )
 
     user = users.find_one({"uuid": bson.Binary.from_uuid(uuid)}, {"_id": 0, "password": 0})
-    if user is None:
+    return user
+
+
+@router.delete("/{uuid}", 
+    response_model_exclude_defaults=True, 
+    status_code=status.HTTP_204_NO_CONTENT
+)
+async def delete_user(uuid: UUID, current_user = Security(get_current_active_user)):
+    """
+    Delete a user by uuid.
+
+    - **uuid**: User uuid (required)
+    """
+    if current_user["uuid"] != uuid:
         return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND,
-            content={"message": "User not found"}
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={"message": "You are not allowed to access this resource"}
         )
 
-    return user
-    
+    users.delete_one({"uuid": bson.Binary.from_uuid(uuid)})

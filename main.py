@@ -12,6 +12,7 @@ from config import settings
 from routers.routers import api_router
 
 from middlewares import exception_handling_middleware
+from core.database import db
 
 
 app = FastAPI(
@@ -38,5 +39,15 @@ app.add_middleware(
 @app.get("/", include_in_schema=False)
 async def root():
     return {"message": "Hello World"}
+
+@app.get("/mongo", include_in_schema=False)
+async def mongo():
+    # check if mongo is connected
+    try:
+        db.test.insert_one({"test": "test"})
+    except Exception:
+        return {"message": "MongoDB Not Connected"}
+
+    return {"message": "MongoDB Connected"}
 
 app.include_router(api_router)
