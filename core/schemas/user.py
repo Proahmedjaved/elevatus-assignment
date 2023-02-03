@@ -3,7 +3,7 @@
 """
 
 from uuid import UUID
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 from utilities import LowerCaseEmailStr
 
 
