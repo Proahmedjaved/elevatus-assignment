@@ -58,3 +58,26 @@ docker-compose up
 docker build -t fastapi-mongodb .
 ```
 
+# Test
+
+<!-- test application -->
+
+```bash
+pytest
+```
+## Code Coverage
+
+<!-- test application -->
+
+```bash
+coverage run -m pytest
+```
+
+<!-- generate report -->
+
+```bash
+coverage report
+```
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
