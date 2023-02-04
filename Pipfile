@@ -15,6 +15,7 @@ python-multipart = "*"
 pytest = "*"
 httpx = "*"
 coverage = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
