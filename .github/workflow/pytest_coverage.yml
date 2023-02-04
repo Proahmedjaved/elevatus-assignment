@@ -1,0 +1,44 @@
+# Github action for fastapi and mongodb pytest coverage, pipenv
+
+name: pytest_coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
+      MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+      ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9.16
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9.16
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+    - name: Test with pytest
+      run: |
+        pipenv run pytest --cov=app --cov-report=xml --cov-report=html
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+    
