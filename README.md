@@ -1,5 +1,5 @@
 <!-- Generate Readme for fastapi appication with mongo db using pipenv -->
-
+[![codecov](https://codecov.io/gh/Proahmedjaved/elevatus-assignment/branch/main/graph/badge.svg?token=99L5K24GKD)](https://codecov.io/gh/Proahmedjaved/elevatus-assignment)
 # FastAPI with MongoDB
 
 This is a simple example of how to use FastAPI with MongoDB.
