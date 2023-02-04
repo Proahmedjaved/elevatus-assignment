@@ -1,7 +1,7 @@
 <!-- Generate Readme for fastapi appication with mongo db using pipenv -->
 
 
-![example branch parameter](https://github.com/Proahmedjaved/elevatus-assignment/blob/main/.github/workflows/pytest_coverage.yml/badge.svg?branch=main)
+[![testing](https://github.com/Proahmedjaved/elevatus-assignment/actions/workflows/pytest_coverage.yml/badge.svg?branch=main)](https://github.com/Proahmedjaved/elevatus-assignment/actions/workflows/pytest_coverage.yml)
 
 [![codecov](https://codecov.io/gh/Proahmedjaved/elevatus-assignment/branch/main/graph/badge.svg?token=99L5K24GKD)](https://codecov.io/gh/Proahmedjaved/elevatus-assignment)
 # FastAPI with MongoDB
