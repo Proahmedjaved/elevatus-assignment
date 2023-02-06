@@ -1,6 +1,6 @@
 # Github action for fastapi and mongodb pytest coverage, pipenv
 
-name: pytest_coverage
+name: testing
 
 on:
   push:
